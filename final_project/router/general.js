@@ -37,26 +37,49 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  res.send(JSON.stringify(books,null,10));
+public_users.get('/',async function (req, res) {
+  try {
+    const response = await axios.get('http://localhost:5000/books');
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching books", error: error.message });
+  }
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   const isbn = req.params.isbn;
-    res.send(books[isbn]);
+    let getBooksByIsbn = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            resolve(
+                res.send(books[isbn])
+            );
+        });
+    });
 });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
    const author = req.params.author;
+   let getBooksByauthor = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            resolve(
     res.send(books[author]);
+    );
+        });
+    });
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   const title = req.params.title;
+  let getBooksBytitle = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            resolve(
     res.send(books[title]);
+    );
+        });
+    });
 });
 
 //  Get book review
